@@ -35,7 +35,18 @@ if (Shop::isFeatureActive())
     !Configuration::updateValue('MYALLEGRO_NAME', 'my friend')
   )
     return false;
+ public function uninstall()
+{
+  if (!parent::uninstall() ||
+    !Configuration::deleteByName('MYALLEGRO_NAME')
+  )
+    return false;
  
   return true;
+}
+  return true;
   }
+  
+  
+  
 }
