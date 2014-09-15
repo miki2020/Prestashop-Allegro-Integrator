@@ -35,6 +35,11 @@ if (Shop::isFeatureActive())
     !Configuration::updateValue('MYALLEGRO_NAME', 'my friend')
   )
     return false;
+
+  return true;
+  }
+
+
  public function uninstall()
 {
   if (!parent::uninstall() ||
@@ -43,10 +48,27 @@ if (Shop::isFeatureActive())
     return false;
  
   return true;
-}
-  return true;
-  }
-  
+}  
+ 
+public function getContent()
+{
+    $output = null;
+ 
+    if (Tools::isSubmit('submit'.$this->name))
+    {
+        $my_module_name = strval(Tools::getValue('MYALLEGRO_NAME'));
+        if (!$my_module_name
+          || empty($my_module_name)
+          || !Validate::isGenericName($my_module_name))
+            $output .= $this->displayError($this->l('Invalid Configuration value'));
+        else
+        {
+            Configuration::updateValue('MYALLEGRO_NAME', $my_module_name);
+            $output .= $this->displayConfirmation($this->l('Settings updated'));
+        }
+    }
+    return $output.$this->displayForm();
+} 
   
   
 }
