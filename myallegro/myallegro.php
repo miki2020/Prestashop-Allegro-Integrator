@@ -24,5 +24,10 @@ class MyAllegro extends Module
     if (!Configuration::get('MYALLEGRO_NAME'))      
       $this->warning = $this->l('No name provided');
   }
-  
+  public function install()
+  {
+  if (!parent::install())
+    return false;
+  return true;
+  }
 }
