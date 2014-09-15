@@ -26,8 +26,16 @@ class MyAllegro extends Module
   }
   public function install()
   {
-  if (!parent::install())
+if (Shop::isFeatureActive())
+    Shop::setContext(Shop::CONTEXT_ALL);
+ 
+  if (!parent::install() ||
+    !$this->registerHook('leftColumn') ||
+    !$this->registerHook('header') ||
+    !Configuration::updateValue('MYMODULE_NAME', 'my friend')
+  )
     return false;
+ 
   return true;
   }
 }
