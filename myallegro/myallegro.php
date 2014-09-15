@@ -22,7 +22,11 @@ class MyAllegro extends Module
     $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
  
     if (!Configuration::get('MYALLEGRO_NAME'))      
-      $this->warning = $this->l('No name provided');
+      $this->warning = $this->l('No Allegro user name provided');
+    if (!Configuration::get('MYALLEGRO_PASS'))      
+      $this->warning = $this->l('No Allegro user password provided');
+    if (!Configuration::get('MYALLEGRO_APIKEY'))      
+      $this->warning = $this->l('No Allegro APIKEY provided');  
   }
   public function install()
   {
@@ -32,7 +36,9 @@ if (Shop::isFeatureActive())
   if (!parent::install() ||
     !$this->registerHook('leftColumn') ||
     !$this->registerHook('header') ||
-    !Configuration::updateValue('MYALLEGRO_NAME', 'my friend')
+    !Configuration::updateValue('MYALLEGRO_NAME', 'Allegro_user') ||
+    !Configuration::updateValue('MYALLEGRO_PASS', 'Allegro_user_password') ||
+    !Configuration::updateValue('MYALLEGRO_APIKEY', 'Allegro_user_APIKEY')
   )
     return false;
 
@@ -43,7 +49,9 @@ if (Shop::isFeatureActive())
  public function uninstall()
 {
   if (!parent::uninstall() ||
-    !Configuration::deleteByName('MYALLEGRO_NAME')
+    !Configuration::deleteByName('MYALLEGRO_NAME')||
+    !Configuration::deleteByName('MYALLEGRO_PASS')||
+    !Configuration::deleteByName('MYALLEGRO_APIKEY')
   )
     return false;
  
@@ -66,6 +74,33 @@ public function getContent()
             Configuration::updateValue('MYALLEGRO_NAME', $my_module_name);
             $output .= $this->displayConfirmation($this->l('Settings updated'));
         }
+        
+        $my_module_pass = strval(Tools::getValue('MYALLEGRO_PASS'));
+        if (!$my_module_pass
+          || empty($my_module_pass)
+          || !Validate::isPasswd($my_module_pass)
+          )
+            $output .= $this->displayError($this->l('Invalid Configuration value'));
+        else
+        {
+            Configuration::updateValue('MYALLEGRO_PASS', $my_module_pass);
+            $output .= $this->displayConfirmation($this->l('Settings updated'));
+        }
+        
+      $my_module_apikey = strval(Tools::getValue('MYALLEGRO_APIKEY'));
+        if (!$my_module_apikey
+          || empty($my_module_apikey)
+          || !Validate::isPasswdAdmin($my_module_apikey)
+          )
+            $output .= $this->displayError($this->l('Invalid Configuration value'));
+        else
+        {
+            Configuration::updateValue('MYALLEGRO_APIKEY', $my_module_apikey);
+            $output .= $this->displayConfirmation($this->l('Settings updated'));
+        }  
+        
+        
+        
     }
     return $output.$this->displayForm();
 } 
