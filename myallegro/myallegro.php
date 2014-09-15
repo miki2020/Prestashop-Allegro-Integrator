@@ -118,9 +118,23 @@ public function getContent()
         'input' => array(
             array(
                 'type' => 'text',
-                'label' => $this->l('Configuration value'),
+                'label' => $this->l('Allegro user name'),
                 'name' => 'MYALLEGRO_NAME',
                 'size' => 20,
+                'required' => true
+            ),
+            array(
+                'type' => 'password',
+                'label' => $this->l('Allegro password'),
+                'name' => 'MYALLEGRO_PASS',
+                'size' => 20,
+                'required' => true
+            ),
+            array(
+                'type' => 'text',
+                'label' => $this->l('Allegro WebApi Key'),
+                'name' => 'MYALLEGRO_APIKEY',
+                'size' => 50,
                 'required' => true
             )
         ),
@@ -162,7 +176,8 @@ public function getContent()
      
     // Load current value
     $helper->fields_value['MYALLEGRO_NAME'] = Configuration::get('MYALLEGRO_NAME');
-     
+    $helper->fields_value['MYALLEGRO_PASS'] = Configuration::get('MYALLEGRO_PASS');
+    $helper->fields_value['MYALLEGRO_APIKEY'] = Configuration::get('MYALLEGRO_APIKEY');
     return $helper->generateForm($fields_form);
 } 
 }
