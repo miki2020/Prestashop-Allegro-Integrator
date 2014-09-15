@@ -32,7 +32,7 @@ if (Shop::isFeatureActive())
   if (!parent::install() ||
     !$this->registerHook('leftColumn') ||
     !$this->registerHook('header') ||
-    !Configuration::updateValue('MYMODULE_NAME', 'my friend')
+    !Configuration::updateValue('MYALLEGRO_NAME', 'my friend')
   )
     return false;
  
