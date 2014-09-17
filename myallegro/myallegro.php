@@ -136,6 +136,12 @@ public function getContent()
                 'name' => 'MYALLEGRO_APIKEY',
                 'size' => 50,
                 'required' => true
+            ),
+			array(
+                'type' => 'textarea',
+                'label' => $this->l('Allegro Output'),
+                'name' => 'MYALLEGRO_OUTPUT',                
+                'required' => false
             )
         ),
         'submit' => array(
@@ -179,17 +185,30 @@ public function getContent()
     $helper->fields_value['MYALLEGRO_PASS'] = Configuration::get('MYALLEGRO_PASS');
     $helper->fields_value['MYALLEGRO_APIKEY'] = Configuration::get('MYALLEGRO_APIKEY');
     
- // try Allewgro   
-    //define('COUNTRY_CODE', 1);
-    define('COUNTRY_CODE', 228);
+ // try Allegro   
+    define('COUNTRY_CODE', 1);
+ //   define('COUNTRY_CODE', 228);
     
 define('WEBAPI_USER_LOGIN', Configuration::get('MYALLEGRO_NAME'));
 define('WEBAPI_USER_ENCODED_PASSWORD', base64_encode(hash('sha256', Configuration::get('MYALLEGRO_PASS'), true)));
 define('WEBAPI_KEY', Configuration::get('MYALLEGRO_APIKEY'));
  
-$options['features'] = SOAP_SINGLE_ELEMENT_ARRAYS;
+
+$options = array( 
+        // Stuff for development. 
+        //'trace' => 1, 
+        //'exceptions' => true, 
+        //'cache_wsdl' => WSDL_CACHE_NONE, 
+        'features' => SOAP_SINGLE_ELEMENT_ARRAYS); 
+
+//$options['features'] = SOAP_SINGLE_ELEMENT_ARRAYS;
+//print_r($options);
+//$helper->fields_value['MYALLEGRO_OUTPUT'] = print_r($options);
+
 try {
-    $soapClient = new SoapClient('https://webapi.allegro.pl/service.php?wsdl', $options);
+    
+	$soapClient = new SoapClient('https://webapi.allegro.pl/service.php?wsdl', $options);
+//	$soapClient = new SoapClient('https://webapi.allegro.pl.webapisandbox.pl/service.php?wsdl', $options);
     $request = array(
         'countryId' => COUNTRY_CODE,
         'webapiKey' => WEBAPI_KEY
@@ -216,12 +235,15 @@ try {
     );
  
     $myWonItems = $soapClient->doGetMyWonItems($request);
-    var_dump($myWonItems);
+    //var_dump($myWonItems);
+	$helper->fields_value['MYALLEGRO_OUTPUT'] = print_r($myWonItems,1);
  
 } catch(Exception $e) {
-    echo $e;
+    //echo $e;
+	
+	$helper->fields_value['MYALLEGRO_OUTPUT'] = print_r($e,1);
 }
-    
+   
     
     
     return $helper->generateForm($fields_form);
