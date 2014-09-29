@@ -234,9 +234,9 @@ try {
         'pageSize' => 50
     );
  
-    $myWonItems = $soapClient->doGetMyWonItems($request);
+    $myItems = $soapClient->doGetMySellItems($request);
     //var_dump($myWonItems);
-	$helper->fields_value['MYALLEGRO_OUTPUT'] = print_r($myWonItems,1);
+	$helper->fields_value['MYALLEGRO_OUTPUT'] = print_r($myItems,1);
  
 } catch(Exception $e) {
     //echo $e;
