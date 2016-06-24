@@ -237,6 +237,14 @@ try {
     $myItems = $soapClient->doGetMySellItems($request);
     //var_dump($myWonItems);
 	$helper->fields_value['MYALLEGRO_OUTPUT'] = print_r($myItems,1);
+	
+	
+	$this->smarty->assign(array(
+			'allegro_out' => $helper->fields_value['MYALLEGRO_OUTPUT'],
+			
+		));
+		 return $this->display(__FILE__, 'views/templates/front/aukcje.tpl');
+	
  
 } catch(Exception $e) {
     //echo $e;
